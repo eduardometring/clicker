@@ -24,7 +24,7 @@ app.use(express.static('public'));
 io.on('connection', (socket) => {
 	// Join
 	socket.on('join', (name) => {
-		clients[socket.id] = { name: name, color: `rgba(${utils.random(0, 100)}, ${utils.random(0, 100)}, ${utils.random(0, 100)})` };
+		clients[socket.id] = { name: name, color: `rgba(${utils.random(50, 200)}, ${utils.random(50, 200)}, ${utils.random(50, 200)})` };
 	});
 
 	// Disconnect
@@ -39,6 +39,6 @@ io.on('connection', (socket) => {
 	});
 });
 
-http.listen(3000, () => {
+http.listen(8080, '0.0.0.0', () => {
 	console.log('Server online');
 });
