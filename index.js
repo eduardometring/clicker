@@ -12,7 +12,11 @@ const game = {
 	},
 	prices: {
 		grandma: { value: 20, object: 'cookie' },
-	}
+	},
+	workersConfig: {
+		grandma: { time: 5000, object: 'cookie', add: 1 }
+	},
+	workers: []
 };
 
 // Linguagem de programação HTML
@@ -27,6 +31,22 @@ app.get('/game', (req, res) => {
 // Arquivos estáticos
 app.use(express.static('public'));
 
+// Um único worker a cada .5s opera todos ao mesmo tempo
+setInterval(serviceWorker, 500);
+
+function serviceWorker() {
+	const now = new Date().getTime();
+	game.workers.forEach((worker, i) => {
+		const { type, latestJob } = worker;
+		const { time, object, add } = game.workersConfig[type];
+		if ((latestJob + time) <= now ) {
+			game.workers[i].latestJob = new Date().getTime();
+			game.inventory[object] += add;
+		}
+	});
+	io.emit('game render', game);
+}
+
 io.on('connection', (socket) => {
 	// Join
 	socket.on('join', (name) => {
@@ -37,7 +57,6 @@ io.on('connection', (socket) => {
 	// Disconnect
 	socket.on('disconnect', () => {
 		delete clients[socket.id];
-		console.log(JSON.stringify(clients));
 	});
 
 	// Chat
@@ -54,6 +73,7 @@ io.on('connection', (socket) => {
 			case 'grandma':
 				if (utils.checkPrice(game, object)) {
 					utils.buy(game, object);
+					game.workers.push({ type: 'grandma', latestJob: new Date().getTime() });
 				}
 				break;
 		}
