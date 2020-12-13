@@ -3,6 +3,7 @@ const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
+const clients = {};
 // // index.html
 app.get('/', (req, res) => {
 	res.sendFile(__dirname + '/public/intro.html');
@@ -16,14 +17,16 @@ app.get('/game', (req, res) => {
 app.use(express.static('public'));
 
 io.on('connection', (socket) => {
-	console.log('a user connected');
+	socket.on('join', (name) => {
+		clients[socket.id] = name;
+	});
 
 	socket.on('disconnect', () => {
 		console.log('user disconnected');
 	});
 
-	socket.on('chat message', (msg) => {
-		io.emit('chat message', msg);
+	socket.on('chat message', (message) => {
+		io.emit('chat message', clients[socket.id], message);
 	});
 });
 

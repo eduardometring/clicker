@@ -6,15 +6,17 @@
 		<link rel="stylesheet" href="style.css">
 	</head>
 	<body>
-
-		<div class="row text-center">
-
-
-			<div class="col-md-12">
-				<form action="/game" method="GET"></form>
-				Digite seu nome para começar
-				<!-- input name="name" -->
-				<!-- submit -->
+		<div class="container" style="height: 100%;position: fixed">
+			<div class="row text-center h-100 d-flex justify-content-center align-items-center">
+				<div class="col-md-4">
+					<h3>Digite seu nome para começar</h3>
+					<form action="/game" method="GET">
+						<div class="input-group">
+							<input type="text" class="form-control" name="name">
+							<button type="submit" class="btn btn-primary">Send</button>
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
 	</body>
