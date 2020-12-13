@@ -9,12 +9,20 @@ const game = {
 	inventory: {
 		cookie: 0,
 		grandma: 0,
+		grandpa: 0,
+		thief: 0,
+		cop: 0,
 	},
 	prices: {
-		grandma: { value: 20, object: 'cookie' },
+		grandma: { value: 100, object: 'cookie' },
+		grandpa: { value: 300, object: 'cookie'},
+		cop: { value: 5, object: 'cookie'},
 	},
 	workersConfig: {
-		grandma: { time: 5000, object: 'cookie', add: 1 }
+		grandma: { time: 5000, object: 'cookie', add: 1 },
+		grandpa: { time: 10000, object: 'grandma', add: 1 },
+		cop: { time: 15000, object: 'thief', remove: 1 },
+		thief: { time: 10000, object: 'cookie', remove: 15 },
 	},
 	workers: []
 };
@@ -34,14 +42,26 @@ app.use(express.static('public'));
 // Um único worker a cada .5s opera todos ao mesmo tempo
 setInterval(serviceWorker, 500);
 
+setInterval(addThief, 10000);
+
+function addThief() {
+	game.workers.push({ type: 'thief', latestJob: 0 });
+	game.inventory.thief ++;
+}
+
 function serviceWorker() {
 	const now = new Date().getTime();
 	game.workers.forEach((worker, i) => {
 		const { type, latestJob } = worker;
-		const { time, object, add } = game.workersConfig[type];
+		const { time, object, add, remove } = game.workersConfig[type];
 		if ((latestJob + time) <= now ) {
 			game.workers[i].latestJob = new Date().getTime();
-			game.inventory[object] += add;
+		
+			if (remove) {
+				game.inventory[object] -= remove;
+			} else {
+				game.inventory[object] += add;
+			}
 		}
 	});
 	io.emit('game render', game);
@@ -76,7 +96,20 @@ io.on('connection', (socket) => {
 					game.workers.push({ type: 'grandma', latestJob: new Date().getTime() });
 				}
 				break;
-		}
+			case 'grandpa': 
+				if (utils.checkPrice(game, object)) {
+					utils.buy(game, object);
+					game.workers.push({ type: 'grandpa', latestJob: new Date().getTime() });
+				}
+				break;
+			case 'cop':
+				if(utils.checkPrice(game, object)) {
+					utils.buy(game, object);
+					game.workers.push({type: 'cop', latestJob: new Date().getTime() });
+				}
+				break;
+			}
+
 
 
 		io.emit('game render', game);

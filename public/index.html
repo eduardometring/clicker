@@ -20,6 +20,12 @@
 								<button id="grandma-button" class="btn btn-warning btn-lg">Velhas
 									<!-- <img src="images/cookie.png" style="width: 1.2rem"> -->
 								</button>
+								&nbsp;
+								<button id="grandpa-button" class="btn btn-warning btn-lg">Velhos
+								</button>
+								&nbsp;
+								<button id="cop-button" class="btn btn-warning btn-lg">Policial
+								</button>
 							</div>
 							<br><br><br>
 
@@ -58,20 +64,30 @@
 											<img src="images/cookie.png" style="width: 1.2rem">
 										</td>
 										<td>
-											<a href="#" data-toggle="tooltip" title="...">Vovô</a>
+											<a href="#" data-toggle="tooltip" title="Não sei o que velhos fazem cu penis">Vovô</a>
 										</td>
-										<td id="grandpa-price">-</td>
-										<td id="">-</td>
+										<td id="grandpa-price">40</td>
+										<td id="grandpa-inventory">0</td>
 									</tr>
 									<tr>
 										<td>
 											<img src="images/cookie.png" style="width: 1.2rem">
 										</td>
 										<td>
-											<a href="#" data-toggle="tooltip" title="...">Mallandros</a>
+											<a href="#" data-toggle="tooltip" title="Mallandos são arrombados. Eles roubam seus cookies pois você é #GAY!!!!!!!!!!!!!!">Mallandros</a>
 										</td>
 										<td id="">-</td>
-										<td>-</td>
+										<td id="thief-inventory">0</td>
+									</tr>
+									<tr>
+									<td>
+										<img src="images/cookie.png" style="width: 1.2rem">
+									</td>
+									<td>
+										<a href="#" data-toggle="tooltip" title="Policiais são do caralho. Eles matam os malandros que estavam roubando seus cookies">Policiais</a>
+									</td>
+									<td id="cop-price">5000</td>
+									<td id="cop-inventory">0</td>
 									</tr>
 								</tbody>
 							</table>
@@ -87,7 +103,7 @@
 						</ul>
 						<form action="">
 							<div class="input-group p-2">
-								<input id="m" class="form-control" autocomplete="off" />
+								<input id="m" class="form-control" autocomplete="off" placeholder="Dá um tapa na gostosa, meu! Oloko, bicho!"/>
 								<button class="btn btn-primary">Send</button>
 							</div>
 						</form>
@@ -111,7 +127,7 @@
 				socket.emit('join', searchParams.get('name'));
 
 				socket.on('chat message', function(user, message) {
-					$('#messages').append($('<li>').html(`<span style="color: ${user.color}; font-weight: bold">${user.name}</span>: ${message}`));
+					$('#messages').append($('<li>').html(`<span style="color: ${user.color}; font-weight: bold">${user.name}:</span> ${message}`));
 					const chatWindow = document.getElementById('messages');
 					chatWindow.scrollTo(0, chatWindow.scrollHeight);
 				});
@@ -130,7 +146,14 @@
 				$('#grandma-button').on('click', () => {
 					socket.emit('click', 'grandma');
 				});
+				
+				$('#grandpa-button').on('click', () => {
+					socket.emit('click', 'grandpa');
+				});
 
+				$('#cop-button').on('click', () => {
+					socket.emit('click', 'cop');
+				});
 				$('form').submit(function(e) {
 					e.preventDefault();
 					if(!$('#m').val()) return;
@@ -144,10 +167,15 @@
 				// Inventory
 				$('#cookie-inventory').html(game.inventory.cookie);
 				$('#grandma-inventory').html(game.inventory.grandma);
+				$('#grandpa-inventory').html(game.inventory.grandpa);
+				$('#cop-inventory').html(game.inventory.cop);
+				$('#thief-inventory').html(game.inventory.thief);
 
 				// Prices
 				$('#grandma-price').html(game.prices.grandma.value);
-				// $('#grandpa-price').html(game.prices.grandpa.value);
+				$('#grandpa-price').html(game.prices.grandpa.value);
+				$('#cop-price').html(game.prices.cop.value);
+
 			}
 
 
