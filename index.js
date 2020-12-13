@@ -5,8 +5,14 @@ const io = require('socket.io')(http);
 const utils = require('./utils');
 const clients = {};
 
-const clickerGame = {
-	cookies: 0
+const game = {
+	inventory: {
+		cookie: 0,
+		grandma: 0,
+	},
+	prices: {
+		grandma: { value: 200, object: 'cookie' },
+	}
 };
 
 // Linguagem de programação HTML
@@ -25,17 +31,36 @@ io.on('connection', (socket) => {
 	// Join
 	socket.on('join', (name) => {
 		clients[socket.id] = { name: name, color: `rgba(${utils.random(50, 200)}, ${utils.random(50, 200)}, ${utils.random(50, 200)})` };
+		io.emit('game render', game);
 	});
 
 	// Disconnect
 	socket.on('disconnect', () => {
 		delete clients[socket.id];
 		console.log(JSON.stringify(clients));
-		console.log('user disconnected');
 	});
 
+	// Chat
 	socket.on('chat message', (message) => {
 		io.emit('chat message', clients[socket.id], message);
+	});
+
+	// Clicks
+	socket.on('click', (object) => {
+		switch (object) {
+			case 'cookie':
+				game.inventory[object]++;
+				break;
+			case 'grandma':
+				if (utils.checkPrice(game, object)) {
+					game = utils.decrementInventory(game, object);
+					game.inventory[object]++;
+				}
+				break;
+		}
+
+
+		io.emit('game render', game);
 	});
 });
 

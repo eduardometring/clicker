@@ -13,41 +13,53 @@
 					<div class="row text-center">
 						<div class="col-md-12">
 							<div class="p-5">
-								<button class="btn btn-warning btn-lg">Cookie
+								<button id="cookie-button" class="btn btn-warning btn-lg">Cookie
 									<img src="images/cookie.png" style="width: 1.2rem">
 								</button>
 							</div>
 							<br><br><br>
 
 							<table class="table">
+								<thead>
+									<tr>
+										<td></td>
+										<td>Recurso</td>
+										<td>Custo</td>
+										<td>Quantidade</td>
+									</tr>
+								</thead>
 								<tbody>
 									<tr>
 										<td>
 											<img src="images/cookie.png" style="width: 1.2rem">
 										</td>
 										<td>Cookies</td>
-										<td>1</td>
+										<td id="cookie-cost">0</td>
+										<td id="cookie-count">-</td>
 									</tr>
 									<tr>
 										<td>
 											<img src="images/cookie.png" style="width: 1.2rem">
 										</td>
 										<td>Vovó</td>
-										<td>0</td>
+										<td id="grandma-cost">-</td>
+										<td id="grandma-count">-</td>
 									</tr>
 									<tr>
 										<td>
 											<img src="images/cookie.png" style="width: 1.2rem">
 										</td>
 										<td>Vovô</td>
-										<td>0</td>
+										<td id="grandpa-cost">-</td>
+										<td id="">-</td>
 									</tr>
 									<tr>
 										<td>
 											<img src="images/cookie.png" style="width: 1.2rem">
 										</td>
 										<td>Mallandros</td>
-										<td>0</td>
+										<td id="">-</td>
+										<td>-</td>
 									</tr>
 								</tbody>
 							</table>
@@ -76,21 +88,39 @@
 		<script src="js/bootstrap.min.js"></script>
 		<script>
 			$(function () {
+				// Sockets
 				const socket = io();
-				const searchParams = new URLSearchParams(location.search)
+				const searchParams = new URLSearchParams(location.search);
 				socket.emit('join', searchParams.get('name'));
 
+				socket.on('chat message', (user, message) => {
+					$('#messages').append($('<li>').html(`<b><span style="color: ${user.color}">${user.name}</span></b>: ${message}`));
+				});
+
+				socket.on('game render', (game) => render(game));
+
+				// Add event listeners
+				eventListeners(socket);
+			});
+
+			const eventListeners = (socket) => {
+				$('#cookie-button').on('click', () => {
+					socket.emit('click', 'cookie');
+				});
+
 				$('form').submit(function(e){
-					e.preventDefault(); // prevents page reloading
+					e.preventDefault();
 					socket.emit('chat message', $('#m').val());
 					$('#m').val('');
 					return false;
 				});
+			}
 
-				socket.on('chat message', function(user, message){
-					$('#messages').append($('<li>').html(`<b><span style="color: ${user.color}">${user.name}</span></b>: ${message}`));
-				});
-			});
+			const render = (game) => {
+				console.log('rendering');
+				$('#cookie-count').html(game.cookie);
+				$('#grandma-count').html(game.grandma);
+			}
 		</script>
 	</body>
 </html>
