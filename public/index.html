@@ -16,6 +16,10 @@
 								<button id="cookie-button" class="btn btn-warning btn-lg">Cookie
 									<img src="images/cookie.png" style="width: 1.2rem">
 								</button>
+								&nbsp;
+								<button id="grandma-button" class="btn btn-warning btn-lg">Velhas
+									<!-- <img src="images/cookie.png" style="width: 1.2rem"> -->
+								</button>
 							</div>
 							<br><br><br>
 
@@ -33,31 +37,39 @@
 										<td>
 											<img src="images/cookie.png" style="width: 1.2rem">
 										</td>
-										<td>Cookies</td>
-										<td id="cookie-cost">0</td>
-										<td id="cookie-count">-</td>
+										<td>
+											<a href="#" data-toggle="tooltip" title="...">Cookies</a>
+										</td>
+										<td id="cookie-price">0</td>
+										<td id="cookie-inventory">-</td>
 									</tr>
 									<tr>
 										<td>
 											<img src="images/cookie.png" style="width: 1.2rem">
 										</td>
-										<td>Vovó</td>
-										<td id="grandma-cost">-</td>
-										<td id="grandma-count">-</td>
+										<td>
+											<a href="#" data-toggle="tooltip" title="Velhas são do caralho. Elas podem criar cookies a cada 5s">Vovó</a>
+										</td>
+										<td id="grandma-price">-</td>
+										<td id="grandma-inventory">-</td>
 									</tr>
 									<tr>
 										<td>
 											<img src="images/cookie.png" style="width: 1.2rem">
 										</td>
-										<td>Vovô</td>
-										<td id="grandpa-cost">-</td>
+										<td>
+											<a href="#" data-toggle="tooltip" title="...">Vovô</a>
+										</td>
+										<td id="grandpa-price">-</td>
 										<td id="">-</td>
 									</tr>
 									<tr>
 										<td>
 											<img src="images/cookie.png" style="width: 1.2rem">
 										</td>
-										<td>Mallandros</td>
+										<td>
+											<a href="#" data-toggle="tooltip" title="...">Mallandros</a>
+										</td>
 										<td id="">-</td>
 										<td>-</td>
 									</tr>
@@ -68,6 +80,7 @@
 				</div>
 
 				<div class="col-12 col-md-4 h-100">
+
 					<div class="chat-box d-flex flex-column h-100">
 						<ul id="messages" class="h-100">
 
@@ -79,15 +92,19 @@
 							</div>
 						</form>
 					</div>
+
 				</div>
 			</div>
 		</div>
 
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
+		<script src="js/bootstrap.bundle.min.js"></script>
 		<script>
 			$(function () {
+				// Tooltip
+				$('[data-toggle="tooltip"]').tooltip();
+
 				// Sockets
 				const socket = io();
 				const searchParams = new URLSearchParams(location.search);
@@ -110,6 +127,10 @@
 					socket.emit('click', 'cookie');
 				});
 
+				$('#grandma-button').on('click', () => {
+					socket.emit('click', 'grandma');
+				});
+
 				$('form').submit(function(e) {
 					e.preventDefault();
 					if(!$('#m').val()) return;
@@ -120,9 +141,13 @@
 			}
 
 			const render = (game) => {
-				console.log('rendering');
-				$('#cookie-count').html(game.cookie);
-				$('#grandma-count').html(game.grandma);
+				// Inventory
+				$('#cookie-inventory').html(game.inventory.cookie);
+				$('#grandma-inventory').html(game.inventory.grandma);
+
+				// Prices
+				$('#grandma-price').html(game.prices.grandma.value);
+				// $('#grandpa-price').html(game.prices.grandpa.value);
 			}
 
 

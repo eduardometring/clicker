@@ -11,7 +11,7 @@ const game = {
 		grandma: 0,
 	},
 	prices: {
-		grandma: { value: 200, object: 'cookie' },
+		grandma: { value: 20, object: 'cookie' },
 	}
 };
 
@@ -53,8 +53,7 @@ io.on('connection', (socket) => {
 				break;
 			case 'grandma':
 				if (utils.checkPrice(game, object)) {
-					game = utils.decrementInventory(game, object);
-					game.inventory[object]++;
+					utils.buy(game, object);
 				}
 				break;
 		}
