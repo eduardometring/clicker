@@ -7,3 +7,6 @@
 .chat-box {
 	border-left: 2px solid #EEE;
 }
+#messages {
+	overflow-y: scroll;
+}
