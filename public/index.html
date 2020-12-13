@@ -3,41 +3,31 @@
 	<head>
 		<title>Socket.IO chat</title>
 		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="style.css">
-		<!-- <style>
-			* { margin: 0; padding: 0; box-sizing: border-box; }
-			body { font: 13px Helvetica, Arial; }
-			form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-			form input { border: 0; padding: 10px; width: 90%; margin-right: 0.5%; }
-			form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-			#messages { list-style-type: none; margin: 0; padding: 0; }
-			#messages li { padding: 5px 10px; }
-			#messages li:nth-child(odd) { background: #eee; }
-		</style> -->
+		<link rel="stylesheet" href="css/style.css">
 	</head>
 	<body>
-
-		<div class="row text-center">
-			<div class="col-md-8">
-				Jogo
-			</div>
-
-			<div class="col-12 col-md-4">
-				<div class="chat-box">
-					<ul id="messages">
-
-					</ul>
-					<form action="">
-						<div class="input-group">
-							<input id="m" class="form-control" autocomplete="off" />
-							<button class="btn btn-primary">Send</button>
-						</div>
-					</form>
+		<div class="game">
+			<div class="row h-100">
+				<div class="col-md-8">
+					Jogo
 				</div>
 
+				<div class="col-12 col-md-4 h-100">
+					<div class="chat-box d-flex flex-column h-100">
+						<ul id="messages" class="h-100">
+
+						</ul>
+						<form action="">
+							<div class="input-group p-2">
+								<input id="m" class="form-control" autocomplete="off" />
+								<button class="btn btn-primary">Send</button>
+							</div>
+						</form>
+					</div>
+
+				</div>
 			</div>
 		</div>
-
 
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
