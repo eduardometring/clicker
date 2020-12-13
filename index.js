@@ -16,7 +16,7 @@ const game = {
 	prices: {
 		grandma: { value: 100, object: 'cookie' },
 		grandpa: { value: 300, object: 'cookie'},
-		cop: { value: 5, object: 'cookie'},
+		cop: { value: 5000, object: 'cookie'},
 	},
 	workersConfig: {
 		grandma: { time: 5000, object: 'cookie', add: 1 },
@@ -109,8 +109,6 @@ io.on('connection', (socket) => {
 				}
 				break;
 			}
-
-
 
 		io.emit('game render', game);
 	});
