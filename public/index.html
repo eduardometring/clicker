@@ -94,7 +94,7 @@
 				socket.emit('join', searchParams.get('name'));
 
 				socket.on('chat message', function(user, message) {
-					$('#messages').append($('<li>').html(`<span style="color: ${user.color}; font-weight: bold">${user.name}</span>: ` + $('span').text(`${message}`)));
+					$('#messages').append($('<li>').html(`<span style="color: ${user.color}; font-weight: bold">${user.name}</span>: ${message}`));
 					const chatWindow = document.getElementById('messages');
 					chatWindow.scrollTo(0, chatWindow.scrollHeight);
 				});
