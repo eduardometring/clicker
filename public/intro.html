@@ -3,16 +3,16 @@
 	<head>
 		<title>Socket.IO chat</title>
 		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="css/style.css">
 	</head>
 	<body>
-		<div class="container" style="height: 100%;position: fixed">
+		<div class="container" style="height: 100%;position: flex;">
 			<div class="row text-center h-100 d-flex justify-content-center align-items-center">
-				<div class="col-md-4">
+				<div class="col-md-4 mt-5">
 					<h3>Digite seu nome para começar</h3>
 					<form action="/game" method="GET">
 						<div class="input-group">
-							<input type="text" class="form-control" name="name">
+							<input type="text" class="form-control" name="name" placeholder="Ex.: Fausto Silva">
 							<button type="submit" class="btn btn-primary">Send</button>
 						</div>
 					</form>
