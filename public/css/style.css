@@ -10,4 +10,11 @@
 
 #messages {
 	overflow-y: scroll;
+	overflow-x: hidden;
+	list-style-type: none;
+	padding: 12px;
+}
+
+li {
+	word-break: break-all;
 }

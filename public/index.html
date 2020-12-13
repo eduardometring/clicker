@@ -93,8 +93,10 @@
 				const searchParams = new URLSearchParams(location.search);
 				socket.emit('join', searchParams.get('name'));
 
-				socket.on('chat message', (user, message) => {
-					$('#messages').append($('<li>').html(`<b><span style="color: ${user.color}">${user.name}</span></b>: ${message}`));
+				socket.on('chat message', function(user, message) {
+					$('#messages').append($('<li>').html(`<span style="color: ${user.color}; font-weight: bold">${user.name}</span>: ` + $('span').text(`${message}`)));
+					const chatWindow = document.getElementById('messages');
+					chatWindow.scrollTo(0, chatWindow.scrollHeight);
 				});
 
 				socket.on('game render', (game) => render(game));
@@ -108,7 +110,7 @@
 					socket.emit('click', 'cookie');
 				});
 
-				$('form').submit(function(e){
+				$('form').submit(function(e) {
 					e.preventDefault();
 					socket.emit('chat message', $('#m').val());
 					$('#m').val('');
@@ -121,6 +123,8 @@
 				$('#cookie-count').html(game.cookie);
 				$('#grandma-count').html(game.grandma);
 			}
+
+
 		</script>
 	</body>
 </html>
