@@ -26,6 +26,9 @@
 								&nbsp;
 								<button id="cop-button" class="btn btn-warning btn-lg">Policial
 								</button>
+								&nbsp;
+								<button id="bitch-button" class="btn btn-warning btn-lg">Prostitutas
+								</button>
 							</div>
 							<br><br><br>
 
@@ -80,14 +83,24 @@
 										<td id="thief-inventory">0</td>
 									</tr>
 									<tr>
-									<td>
-										<img src="images/cookie.png" style="width: 1.2rem">
-									</td>
-									<td>
-										<a href="#" data-toggle="tooltip" title="Policiais são do caralho. Eles matam os malandros que estavam roubando seus cookies">Policiais</a>
-									</td>
-									<td id="cop-price">5000</td>
-									<td id="cop-inventory">0</td>
+										<td>
+											<img src="images/cookie.png" style="width: 1.2rem">
+										</td>
+										<td>
+											<a href="#" data-toggle="tooltip" title="Policiais são do caralho. Eles matam os malandros que estavam roubando seus cookies">Policiais</a>
+										</td>
+										<td id="cop-price">5000</td>
+										<td id="cop-inventory">0</td>
+									</tr>
+									<tr>
+										<td>
+											<img src="images/cookie.png" style="width: 1.2rem">
+										</td>
+										<td>
+											<a href="#" data-toggle="tooltip" title="i">Prostitutas</a>
+										</td>
+										<td id="bitch-price">10000</td>
+										<td id="bitch-inventory">0</td>
 									</tr>
 								</tbody>
 							</table>
@@ -154,6 +167,9 @@
 				$('#cop-button').on('click', () => {
 					socket.emit('click', 'cop');
 				});
+				$('#bitch-button').on('click', () => {
+					socket.emit('click', 'bitch');
+				});
 				$('form').submit(function(e) {
 					e.preventDefault();
 					if(!$('#m').val()) return;
@@ -170,11 +186,14 @@
 				$('#grandpa-inventory').html(game.inventory.grandpa);
 				$('#cop-inventory').html(game.inventory.cop);
 				$('#thief-inventory').html(game.inventory.thief);
+				$('#bitch-inventory').html(game.inventory.bitch);
+
 
 				// Prices
 				$('#grandma-price').html(game.prices.grandma.value);
 				$('#grandpa-price').html(game.prices.grandpa.value);
 				$('#cop-price').html(game.prices.cop.value);
+				$('#bitch-price').html(game.prices.bitch.value);
 
 			}
 

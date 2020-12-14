@@ -12,17 +12,20 @@ const game = {
 		grandpa: 0,
 		thief: 0,
 		cop: 0,
+		bitch: 0,
 	},
 	prices: {
 		grandma: { value: 100, object: 'cookie' },
 		grandpa: { value: 300, object: 'cookie'},
-		cop: { value: 5000, object: 'cookie'},
+		cop: { value: 500, object: 'cookie'},
+		bitch: { value: 1000, object: 'cookie'}
 	},
 	workersConfig: {
 		grandma: { time: 5000, object: 'cookie', add: 1 },
 		grandpa: { time: 10000, object: 'grandma', add: 1 },
 		cop: { time: 15000, object: 'thief', remove: 1 },
 		thief: { time: 10000, object: 'cookie', remove: 15 },
+		bitch: { time: 20000, object: 'grandpa', add: 5 }
 	},
 	workers: []
 };
@@ -59,9 +62,12 @@ function serviceWorker() {
 		
 			if (remove) {
 				game.inventory[object] -= remove;
+				if(game.inventory[object] < 0) {
+					game.inventory[object] = 0;
+				}
 			} else {
 				game.inventory[object] += add;
-			}
+			} 
 		}
 	});
 	io.emit('game render', game);
@@ -106,6 +112,12 @@ io.on('connection', (socket) => {
 				if(utils.checkPrice(game, object)) {
 					utils.buy(game, object);
 					game.workers.push({type: 'cop', latestJob: new Date().getTime() });
+				}
+				break;
+			case 'bitch':
+				if(utils.checkPrice(game, object)) {
+					utils.buy(game, object);
+					game.workers.push({type: 'bitch', latestJob: new Date().getTime() });
 				}
 				break;
 			}
