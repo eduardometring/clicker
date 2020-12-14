@@ -59,15 +59,28 @@ function serviceWorker() {
 		const { time, object, add, remove } = game.workersConfig[type];
 		if ((latestJob + time) <= now ) {
 			game.workers[i].latestJob = new Date().getTime();
-		
+
 			if (remove) {
 				game.inventory[object] -= remove;
+				if (object == 'thief') {
+					for (let i = 0; i < game.workers.length; i++) {
+						if (game.workers[i].type == object) {
+							game.workers.splice(i, 1);
+						}
+					}
+				}
+
 				if(game.inventory[object] < 0) {
 					game.inventory[object] = 0;
 				}
 			} else {
 				game.inventory[object] += add;
-			} 
+				if (object == 'grandpa' || object == 'grandma') {
+					for (let i = 0; i < add; i++) {
+						game.workers.push({ type: object, latestJob: new Date().getTime() });
+					}
+				}
+			}
 		}
 	});
 	io.emit('game render', game);
@@ -102,7 +115,7 @@ io.on('connection', (socket) => {
 					game.workers.push({ type: 'grandma', latestJob: new Date().getTime() });
 				}
 				break;
-			case 'grandpa': 
+			case 'grandpa':
 				if (utils.checkPrice(game, object)) {
 					utils.buy(game, object);
 					game.workers.push({ type: 'grandpa', latestJob: new Date().getTime() });
